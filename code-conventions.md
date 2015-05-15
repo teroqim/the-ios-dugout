@@ -1,6 +1,6 @@
 Code conventions
 ================
-These are my own conventions I make up as I go along learning about iOS development. Don't agree? Got Suggestion? Write your own conventions file. Or start an issue.  
+These are my own conventions I make up as I go along learning about iOS development. Don't agree? Got suggestions? Write your own conventions file. Or start an issue.  
 /teroqim
 
 Objective-C
@@ -18,23 +18,49 @@ Put one empty line between each of these categories.
 #import "MyClass.h"
 #import "MyOtherClass.h"
 
-<stdlib.h>
+#include <stdlib.h>
 
-<AVFoundation/AVPlayer.h>
-
-/*
-Add private properties in an "empty" category for the class you're implementing.
-*/
+#import <AVFoundation/AVPlayer.h>
 
 /*
-Implementation
-
-Use pragma marks, order by view controller methods, event handlers like hitting buttons, delegate methods, helpers 
+Add private properties in an "empty" category for the class you're implementing. Try to group properties by function.
 */
+@interface MyClass ()
+
+@property AVPlayer *player;
+
+@end
 
 /*
-A word about comments in general.
+Implementation.
+
+Group methods using pragma marks with names that make sense. 
+Put groups in the following order
+- View controller method overrides.
+- Event handlers. (Button touches, swipe handlers, etc.)
+- Delegate methods.
+- Helpers only used in this file.
 */
+@implementation MyClass
+
+#pragma mark View controller overrides
+- (void)viewDidLoad{
+  [super viewDidLoad];
+}
+
+#pragma mark Event handlers
+- (IBAction)buttonTouchUp:(id)sender{
+}
+
+#pragma mark UIViewControllerTransitioningDelegate
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source{
+    return [MyOtherClass new];
+}
+
+#pragma mark Helpers
+- (float)veryComplexCalculation:(float)x{
+  return x + 1.0f;
+}
+
+@end
 ```
-
-TBC
