@@ -1,5 +1,3 @@
-# the-ios-dugout
-My heap of iOS ideas
 
 The iOS Dugout
 ==============
