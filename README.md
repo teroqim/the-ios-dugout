@@ -5,7 +5,7 @@ A place for all those iOS development ideas on the verge of oblivion to gather.
 
 This repo is intended as a place to 'throw in' solutions or ideas you just don't want to lose. At present there are no outspoken requirements for quality, but if it's shit, well, fix it.  
 These solutions or ideas may or may not eventually make their way out of here as e.g. cocoa pods, blog posts or whatever.  
-When possible, please refer to posts/articles/etc that inspired you to write that solution, or from where you 'stole' the idea from.  
+When possible, please refer to posts/articles/etc that inspired you to write that solution, or from where you 'borrowed' the idea.  
 These solutions are and should be open to anyone to use in their projects and modify to their satisfaction. Please, if a solution is not satisfactory, create an issue.
 
 Typical cases when ideas end up here:
