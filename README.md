@@ -10,9 +10,11 @@ These solutions are and should be open to anyone to use in their projects and mo
 
 Typical cases when ideas end up here:
 - Your designer decides your cool new animation is not going to be used in the app.
-- Your designer decides that feature you worked on for a looooong time is no longer going to be featured in the app.
-- You spend forever hunting down an answer to your specific problem and you just want to put it somewhere without to many expectations of documentation, and you may want to use it in another project.
-- You build a class intended to be subclassed in project, but don't feel like building a cocoa pod for it just yet. 
-- You find a set of shortcuts in XCode that seem to fit together in a astounding way, and you need to write them down somewhere.
+- Your designer decides that the feature you were working on for a looooong time is no longer going to be featured in the app.
+- You spend forever hunting down an answer to your specific problem instance. When you find the solution and add it to your current project, you get the feeling that you might want to use it in another project down the line, or maybe you want to write a blog post about it in the future, but in order to not digress from the task at hand you want to save it somewhere without spending a lot of time documenting it properly right away.
+- You build a class intended to be subclassed in a project, but don't feel like building a cocoa pod for it just yet.
+- You find a set of shortcuts in XCode that seem to fit together in an astounding way, and you want to write them down somewhere.
+
+Just remember: Whatever It is, It is an enlightened version of what Was.
 
 WARNING: Use these ideas with caution. Make sure you fully understand anything you bring into your own project.
