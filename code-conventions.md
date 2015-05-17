@@ -40,7 +40,8 @@ Implementation.
 
 Group methods using pragma marks with names that make sense. 
 Put groups in the following order
-- View controller method overrides.
+- Superclass method overrides.
+- Public interface methods.
 - Event handlers. (Button touches, swipe handlers, etc.)
 - Delegate methods.
 - Helpers only used in this file.
@@ -48,12 +49,22 @@ Put groups in the following order
 Put at least one empty line between blocks, @ directives, etc. Exceptions:
 - No space between a pragma mark and the first method in that group. That makes it a bit easier to see what methods belong together when collapsing all methods.
 - No space between a comment and the code it documents.
+
+Method signatures should have the format:
+<-/+><space><type><name><parameters><starting bracket>
 */
 @implementation MyClass
 
 #pragma mark View controller overrides
 - (void)viewDidLoad{
   [super viewDidLoad];
+}
+
+#pragma mark Public interface
+- (void)play{
+}
+
+- (void)pause{
 }
 
 #pragma mark Event handlers
