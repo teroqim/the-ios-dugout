@@ -47,7 +47,7 @@ Put groups in the following order
 
 Put at least one empty line between blocks, @ directives, etc. Exceptions:
 - No space between a pragma mark and the first method in that group. That makes it a bit easier to see what methods belong together when collapsing all methods.
-- No space between comments and the code it documents.
+- No space between a comment and the code it documents.
 */
 @implementation MyClass
 
