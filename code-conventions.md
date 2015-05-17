@@ -9,6 +9,10 @@ Objective-C
 ###General .m file structure
 ```objective-c
 /*
+Optional comment about what is being implemented.
+*/
+
+/*
 Import all headers you need. Order them like this:
 - Local header files. Always put the header for the class you're implementing at the top.
 - C lib includes.
@@ -40,6 +44,10 @@ Put groups in the following order
 - Event handlers. (Button touches, swipe handlers, etc.)
 - Delegate methods.
 - Helpers only used in this file.
+
+Put at least one empty line between blocks, @ directives, etc. Exceptions:
+- No space between a pragma mark and the first method in that group. That makes it a bit easier to see what methods belong together when collapsing all methods.
+- No space between comments and the code it documents.
 */
 @implementation MyClass
 
@@ -63,4 +71,8 @@ Put groups in the following order
 }
 
 @end
+/*
+End file with an empty line.
+*/
+
 ```
