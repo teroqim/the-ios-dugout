@@ -3,7 +3,7 @@ Blurring
 Different ways to blur images/views. Note that there are noticeable performance/options trade offs between these alternatives.
 Blurring an image
 -----------------
-Install GPUImage: https://github.com/BradLarson/GPUImage
+Install GPUImage: https://github.com/BradLarson/GPUImage  
 Then use/modify the following code to your liking:
 ```objective-c
 #import <GPUImage.h>
