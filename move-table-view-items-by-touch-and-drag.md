@@ -7,7 +7,7 @@ If dragging the item to an invalid location and releasing, the item goes back to
 
 [TODO: Create project from this and try which methods are actually needed, right now I get the sense some are superfluous. /teroqim]
 
-This piece of code was inpired by the following tutorial written by Soheil Azarpour:  
+This piece of code was inspired by the following tutorial written by Soheil Azarpour:  
 http://www.raywenderlich.com/63089/cookbook-moving-table-view-cells-with-a-long-press-gesture
 
 ```objective-c
