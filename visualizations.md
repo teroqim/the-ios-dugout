@@ -407,3 +407,197 @@ This needs to be cleaned up and separated into a component for the player and on
 
 @end
 ```
+
+Here an animation for audio, although it is not tied any audio file in particular.
+
+[Images of animation here]
+
+```objective-c
+
+#import <UIKit/UIKit.h>
+
+
+@interface TPlayAnimationView : UIView
+
+@property UIColor *barColor;
+@property NSInteger nrBars;
+@property BOOL mirrorBars;
+@property float minValue;
+@property float maxValue;
+@property float speedFactor;
+
+- (void)resetAnimation;
+- (void)startAnimation;
+- (void)stopAnimation;
+
+@end
+
+```
+
+```objective-c
+
+#import "TPlayAnimationView.h"
+#import <stdlib.h>
+
+
+@interface TPlayAnimationView ()
+
+@property NSMutableArray *currentValues;
+@property NSMutableArray *currentDirections;
+@property NSMutableArray *speeds;
+@property NSTimer *timer;
+
+@end
+
+
+@implementation TPlayAnimationView
+
+- (id)initWithFrame:(CGRect)frame{
+    self = [super initWithFrame:frame];
+    
+    //Set default values
+    [self setBackgroundColor: [UIColor colorWithRed:0 green:0 blue:0 alpha:0]];
+    self.nrBars = 16;
+    self.barColor = [UIColor redColor];
+    self.minValue = 0.10;
+    self.maxValue = 0.25;
+    self.mirrorBars = NO;
+    self.speedFactor = 1.0f;
+    
+    //Init and start animation
+    [self resetAnimation];
+    return self;
+}
+
+- (id)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
+    UIView *hitView = [super hitTest:point withEvent:event];
+    if (hitView == self){
+        return nil;
+    }
+    else {
+        return hitView;
+    }
+}
+
+- (void)resetAnimation{
+    self.currentValues = [[NSMutableArray alloc] init];
+    self.currentDirections = [[NSMutableArray alloc] init];
+    self.speeds = [[NSMutableArray alloc] init];
+    for (int i = 0; i < self.nrBars; i++){
+        //Gen number between -0.5 and 1.0
+        int u = arc4random_uniform(100);
+        float f = u*(self.maxValue - self.minValue)/100 + self.minValue;
+        NSNumber *r = [[NSNumber alloc] initWithFloat:f];
+        [self.currentValues addObject:r];
+        
+        NSNumber *j = [[NSNumber alloc] initWithInteger: arc4random_uniform(1)*2 - 1];
+        [self.currentDirections addObject:j];
+        
+        //Init speeds
+        CGFloat screenHeight = ([[UIScreen mainScreen] bounds]).size.height;
+        CGFloat scale = self.frame.size.height/screenHeight;
+        NSNumber *k = [[NSNumber alloc] initWithFloat: (arc4random_uniform(100)*0.2/100 + 0.1)*scale*self.speedFactor];
+        [self.speeds addObject:k];
+    }
+    
+}
+
+- (void)startAnimation{
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updateValues) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
+}
+
+- (void)stopAnimation{
+    [self.timer invalidate];
+    self.timer = nil;
+}
+
+- (void)updateValues{
+    
+    for (int i = 0; i < self.nrBars; i++){
+        NSNumber *curVal = (NSNumber *) [self.currentValues objectAtIndex:i];
+        NSNumber *curDir = (NSNumber *)[self.currentDirections objectAtIndex:i];
+        NSNumber *speed = (NSNumber *)[self.speeds objectAtIndex:i];
+        
+        float delta = curDir.intValue*speed.floatValue;
+        float newVal = curVal.floatValue + delta;
+        float rest = 0;
+        
+        if (newVal > self.maxValue){
+            [self.currentDirections replaceObjectAtIndex:i withObject:[[NSNumber alloc] initWithInteger: curDir.intValue * -1] ];
+            rest = newVal - self.maxValue;
+            newVal = self.maxValue - rest;
+        }
+        if (newVal < self.minValue){
+            [self.currentDirections replaceObjectAtIndex:i withObject:[[NSNumber alloc] initWithInteger: curDir.intValue * -1] ];
+            rest = newVal - self.minValue;
+            newVal = self.minValue - rest;
+        }
+        
+        [self.currentValues replaceObjectAtIndex:i withObject:[[NSNumber alloc] initWithFloat:newVal]];
+    }
+
+    [self setNeedsDisplay];
+}
+
+- (void)drawRect:(CGRect)rect {
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    //invert y axis, so origin is in left bottom corner
+    CGContextScaleCTM(context, 1, -1);
+    
+    //Set origin to middle of frame
+    CGContextTranslateCTM(context, 0, -rect.size.height);
+    CGContextTranslateCTM(context, 0, rect.size.height/2);
+    
+    //Set bar color
+    CGFloat r=1, g=0, b=0, a=1;
+    [self.barColor getRed:&r green:&g blue:&b alpha:&a];
+    [self.barColor setFill];
+    
+    //Draw bars
+    if(self.mirrorBars){
+        [self drawBars:context inRect:rect withRelMin:0 andRelMax:1];
+        
+        [self.barColor getRed:&r green:&g blue:&b alpha:&a];
+        [self.barColor setFill];
+        CGContextSetRGBFillColor(context, r, g, b, 0.3*a);
+        
+        CGContextScaleCTM(context, 1, -1);
+        [self drawBars:context inRect:rect withRelMin:0 andRelMax:1];
+        CGContextScaleCTM(context, 1, -1);
+    }
+    else{
+        [self drawBars:context inRect:rect withRelMin:-1 andRelMax:1];
+    }
+}
+
+- (void)drawBars:(CGContextRef)context inRect:(CGRect)rect withRelMin:(CGFloat)relMin andRelMax:(CGFloat)relMax{
+    
+    //Set line width (bar width)
+    CGFloat lineWidth = 2;
+    
+    //Draw bars
+    CGFloat absHeight = rect.size.height;
+    CGFloat absWidth = rect.size.width;
+    CGFloat absMax = absHeight/2;
+
+    for (int i = 0; i < self.nrBars; i++){
+        
+        float relX = ((float)i)/self.nrBars;
+        float relY = ((NSNumber *) [self.currentValues objectAtIndex:i]).floatValue;
+        
+        int nrBoxes = (int) ceil(abs(relY*relMax*absMax)/lineWidth);
+        for(int j = 0; j < nrBoxes; j++){
+            UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0.5 + relX*absWidth, 0.5 + relMin*absMax + j*(lineWidth + 0.5), lineWidth, lineWidth) cornerRadius:2];
+            [path fill];
+        }
+    }
+
+    CGContextDrawPath(context, kCGPathStroke);
+}
+
+@end
+
+```
