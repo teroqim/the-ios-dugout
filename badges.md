@@ -39,8 +39,7 @@ Implementation:
 
 @implementation TTabBarItem
 
--(void) setCustomBadge
-{
+- (void)setCustomBadge{
     if (self.hasBadge){
         return;
     }
@@ -72,8 +71,7 @@ Implementation:
     self.hasBadge = YES;
 }
 
-- (void)bumpBadge
-{
+- (void)bumpBadge{
     [UIView animateWithDuration:0.1 animations:^{
         self.badgeView.transform = CGAffineTransformMakeScale(1.5, 1.5);
     } completion:^(BOOL finished){
