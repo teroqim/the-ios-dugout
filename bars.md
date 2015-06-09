@@ -87,3 +87,17 @@ TabBar:
 @end
 
 ```
+
+Misc
+----
+A couple of times I've had problems with the title in a navigation bar being misplaced vertically. Either permanently or for instance during segue animations. One work around for this have been to manually counter displace the title. Not an ideal solution and I should definitely dig into what the problem really is, but until then...
+```objective-c
+//This is here because of a graphical bug, where the navigation bar title
+//is misplaced during segue animation. Got to be a better way to fix this..
+[self.navigationBar setTitleVerticalPositionAdjustment:-8.0f forBarMetrics:UIBarMetricsDefault];
+```
+
+You'd think it would be easy to set the background color of the navigation bar. Well, it is, but it's not like setting the background color of any other view, instead you need set the property barTintColor like so:
+```objective-c
+self.navigationBar.barTintColor = [UIColor blackColor];
+```
