@@ -21,3 +21,33 @@ __weak __block TTableViewController *blockSelf = self;
     
 [CATransaction commit];
 ```
+
+Sticky table header
+-------------------
+If you have a table view with a header, e.g. an image, and you want it to shrink while scrolling down and to have it stick to the top when it should normally roll out of view.
+
+NOTE: This code is old and awful, I need to review it. Laterrr
+```objective-c
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (scrollView.contentOffset.y >= 0){
+        //Shrink
+        CGRect rect = self.tableView.tableHeaderView.frame;
+        
+        //This makes the header stick to the top when scrolling down a bit
+        rect.size.height = MAX(320 - scrollView.contentOffset.y, 70);
+        self.tableView.tableHeaderView.frame = rect;
+        self.tableView.tableHeaderView.bounds = CGRectMake(0, -scrollView.contentOffset.y, rect.size.width, rect.size.height);
+    }
+}
+```
+
+Expand table header on bounce
+-----------------------------
+How to have a table view header expand and shrink in sync with the bounce.
+```objective-c
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (scrollView.contentOffset.y < 0){
+        self.tableView.tableHeaderView.bounds = CGRectMake(0, -scrollView.contentOffset.y, 320 - scrollView.contentOffset.y, 320 - scrollView.contentOffset.y);
+    }
+}
+```
