@@ -88,6 +88,18 @@ TabBar:
 
 ```
 
+Buttons
+-------
+Here is one way to set a custom back button on a navigation bar:
+```objective-c
+UIButton *backButton = [[UIButton alloc] initWithFrame: CGRectMake(0, 0, 20.0f, 16.0f)];
+UIImage *backImage = [[UIImage imageNamed:@"back-arrow-icn"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+[backButton setBackgroundImage:backImage  forState:UIControlStateNormal];
+[backButton setTitle:@"" forState:UIControlStateNormal];
+[backButton addTarget:self action:@selector(unwind) forControlEvents:UIControlEventTouchUpInside];
+UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];    self.navigationItem.leftBarButtonItem = backButtonItem;
+```
+
 Misc
 ----
 A couple of times I've had problems with the title in a navigation bar being misplaced vertically. Either permanently or for instance during segue animations. One work around for this have been to manually counter displace the title. Not an ideal solution and I should definitely dig into what the problem really is, but until then...
