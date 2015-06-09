@@ -97,7 +97,67 @@ UIImage *backImage = [[UIImage imageNamed:@"back-arrow-icn"] imageWithRenderingM
 [backButton setBackgroundImage:backImage  forState:UIControlStateNormal];
 [backButton setTitle:@"" forState:UIControlStateNormal];
 [backButton addTarget:self action:@selector(unwind) forControlEvents:UIControlEventTouchUpInside];
-UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];    self.navigationItem.leftBarButtonItem = backButtonItem;
+UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];  
+self.navigationItem.leftBarButtonItem = backButtonItem;
+```
+
+Dividers
+--------
+Here's how to add a bottom separator to a tabbar for the times when you have a tabbar anywhere but the at the bottom.
+```objective-c
+// Create a new layer which is the width of the device and with a heigh
+// of 0.5px.
+CALayer *bottomBorder = [CALayer layer];
+bottomBorder.frame = CGRectMake(0.0f, self.tabBar.frame.size.height-0.5f, self.view.frame.size.width, 0.5f);
+bottomBorder.backgroundColor = [[UIColor colorWithRed:179.0/255 green:179.0/255 blue:179.0/255 alpha:0.6] CGColor];
+[self.tabBar.layer addSublayer:bottomBorder];
+self.tabBar.clipsToBounds = YES;
+```
+
+Here's how to add a vertical separator at the middle of the tabbar
+```objective-c
+CALayer *middleDivider = [CALayer layer];
+middleDivider.frame = CGRectMake(self.tabBar.frame.size.width/2-0.5f, 10, 1.0f, self.tabBar.frame.size.height-20);
+middleDivider.backgroundColor = [[UIColor colorWithRed:179.0/255 green:179.0/255 blue:179.0/255 alpha:0.25] CGColor];
+[self.tabBar.layer addSublayer:middleDivider];
+```
+
+Global attributes
+-----------------
+To set attributes that apply to all instances of a navigationbar/tabbar/etc use the static attribute 'appearance' like so:
+```objective-c
+UIFont *font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:10];
+[[UITabBarItem appearance] setTitleTextAttributes:@{
+                                                   NSFontAttributeName : font,
+                                                   NSForegroundColorAttributeName : [UIColor blackColor],
+                                                   NSKernAttributeName : @(1.0f)
+                                                   } forState:UIControlStateNormal];
+
+[[UITabBarItem appearance] setTitleTextAttributes:@{
+                                                    NSFontAttributeName : font,
+                                                    NSForegroundColorAttributeName : self.podcast.color,
+                                                    NSKernAttributeName : @(1.0f)
+                                                    } forState:UIControlStateSelected];
+    
+[[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
+    
+CGRect screenSize = [[UIScreen mainScreen] applicationFrame];
+NSUInteger count  = [self.viewControllers count];
+float width  = screenSize.size.width/count;
+[[UITabBar appearance] setItemWidth:width];
+    
+[[UITabBarItem appearance] setTitlePositionAdjustment:UIOffsetMake(0, -15)];
+```
+These settings could for instance be put in the AppDelegate.
+
+TabBar on top
+-------------
+How to place the tabbar just below a navigation bar instead of at the bottom.
+```objective-c
+CGRect fn = self.navigationController.navigationBar.frame;
+CGRect f = self.tabBar.frame;
+f.origin.y = fn.size.height;
+[self.tabBar setFrame:f];
 ```
 
 Misc
@@ -112,4 +172,18 @@ A couple of times I've had problems with the title in a navigation bar being mis
 You'd think it would be easy to set the background color of the navigation bar. Well, it is, but it's not like setting the background color of any other view, instead you need set the property barTintColor like so:
 ```objective-c
 self.navigationBar.barTintColor = [UIColor blackColor];
+```
+and here is how to set a background image for the navigation bar
+```objective-c
+[self.navigationController.navigationBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
+```
+How to hide the navigation bar:
+```objective-c
+[self.navigationController setNavigationBarHidden:NO animated:YES];
+```
+To change the title label of navigation bar
+```objective-c
+//Set up label first, then assign
+[titleLabel sizeToFit];
+self.navigationItem.titleView = titleLabel;
 ```
