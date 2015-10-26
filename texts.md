@@ -36,6 +36,7 @@ It is also posible to concatenate multiple attributed strings with different att
 
 Max number of lines in text container
 ====================================
+Inspired by http://stackoverflow.com/questions/19478679/setting-maximum-number-of-lines-entry-on-uitextview
 ```objective-c
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
     NSMutableString *t = [NSMutableString stringWithString: textView.text];
