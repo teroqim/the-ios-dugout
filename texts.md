@@ -33,3 +33,45 @@ titleLabel.attributedText = attributedString;
 ```
 
 It is also posible to concatenate multiple attributed strings with different attributes into one by using NSMutableAttributedString
+
+Max number of lines in text container
+====================================
+```objective-c
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    NSMutableString *t = [NSMutableString stringWithString: textView.text];
+    [t replaceCharactersInRange: range withString: text];
+    
+    NSUInteger numberOfLines = 1;
+    for (NSUInteger i = 0; i < t.length; i++) {
+        if ([[NSCharacterSet newlineCharacterSet] characterIsMember: [t characterAtIndex: i]]) {
+            numberOfLines++;
+        }
+    }
+
+    //Now check for word wrapping onto newline.
+    NSAttributedString *t2 = [[NSAttributedString alloc]
+                                  initWithString:[NSMutableString stringWithString:t] attributes:@{NSFontAttributeName:textView.font}];
+        
+    __block NSInteger lineCount = 0;
+        
+    CGFloat maxWidth   = textView.textContainer.size.width;
+    NSLog(@"maxWidth = %.02f", maxWidth);
+        
+    NSTextContainer *tc = [[NSTextContainer alloc] initWithSize:CGSizeMake(maxWidth, CGFLOAT_MAX)];
+    NSLayoutManager *lm = [[NSLayoutManager alloc] init];
+    NSTextStorage   *ts = [[NSTextStorage alloc] initWithAttributedString:t2];
+    [ts addLayoutManager:lm];
+    [lm addTextContainer:tc];
+    [lm enumerateLineFragmentsForGlyphRange:NSMakeRange(0, lm.numberOfGlyphs)
+                                     usingBlock:^(CGRect rect,
+                                                  CGRect usedRect,
+                                                  NSTextContainer *textContainer,
+                                                  NSRange glyphRange,
+                                                  BOOL *stop)
+     {
+         lineCount++;
+     }];
+        
+    return (lineCount <= textView.textContainer.maximumNumberOfLines);
+}
+```
